@@ -401,8 +401,269 @@ class Account:
 a1 = Account("123456", "7890")
 print(a1.verify_pin("7890"))  # True
 # print(a1.__pin)  # This would raise an AttributeError
-b1.add_money(100)
-b1.spend_money(150)
-print(b1.get_balance())
-b1.spend_money(-20)
-print(b1.get_balance())
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def eat(self):
+        print(f"{self.name} is eating")
+
+class Dog(Animal):
+    def bark(self):
+        print(f"{self.name} is barking")
+
+class Puppy(Dog):
+    def play(self):
+        print(f"{self.name} is playing")
+
+p1 = Puppy("Rex")
+p1.eat()   # Inherited from Animal
+p1.bark()  # Inherited from Dog
+p1.play()  # Defined in Puppy
+
+class A:
+    def show(self):
+        print("A's show")
+
+class B(A):
+    pass
+
+class C(B):
+    def show(self):
+        print("C's show")
+
+c1 = C()
+c1.show()          # Line A
+
+print(C.__mro__)   # Line B
+class Flyer:
+    def move(self):
+        print("Flyer's move: flying")
+
+class Swimmer:
+    def move(self):
+        print("Swimmer's move: swimming")
+
+class Duck(Swimmer, Flyer):
+    pass
+
+d1 = Duck()
+d1.move()
+print(Duck.__mro__)
+class Shape:
+    def area(self):
+        print("Area not defined")
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    def area(self):
+        print(f"Circle area: {3.14 * self.radius ** 2}")
+
+class Square(Shape):
+    def __init__(self, side):
+        self.side = side
+    def area(self):
+        print(f"Square area: {self.side ** 2}")
+
+shapes = [Circle(5), Square(4)]
+
+for shape in shapes:
+    shape.area()
+
+class Robot:
+    def speak(self):
+        print("Beep boop")
+
+class Human:
+    def speak(self):
+        print("Hello there")
+
+things = [Robot(), Human()]
+
+for thing in things:
+    thing.speak()
+    #1 — combining MRO with attribute values (not just methods):
+class A:
+    def __init__(self):
+        self.value = "A's value"
+
+class B(A):
+    def __init__(self):
+        super().__init__()
+        self.value = "B's value"
+
+class C(B):
+    pass
+
+c1 = C()
+print(c1.value)
+
+from abc import ABC, abstractmethod
+
+class Employee(ABC):
+    def __init__(self, name):
+        self.name = name
+
+    @abstractmethod
+    def calculate_pay(self):
+        pass
+
+    def show(self):
+        print(f"{self.name}: ${self.calculate_pay()}")
+
+class FullTime(Employee):
+    def __init__(self, name, monthly_salary):
+        super().__init__(name)
+        self.monthly_salary = monthly_salary
+    def calculate_pay(self):
+        return self.monthly_salary
+
+class Freelancer(Employee):
+    def __init__(self, name, hours, rate):
+        super().__init__(name)
+        self.hours = hours
+        self.rate = rate
+    def calculate_pay(self):
+        return self.hours * self.rate
+
+workers = [FullTime("Aliza", 50000), Freelancer("Karan", 100, 500)]
+
+for w in workers:
+    w.show()
+#Create a Temperature class with:
+
+#A private attribute __celsius
+#A @property called celsius that returns the value
+#A @celsius.setter that rejects any value below -273.15 (absolute zero — physically impossible temperature) and prints an error message in that case, otherwise updates it normally
+class Temperature:
+    def __init__(self, celsius):
+        self.__celsius = celsius
+
+    @property
+    def celsius(self):
+        return self.__celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            print("Error: Temperature below absolute zero is not possible.")
+        else:
+            self.__celsius = value
+
+t1 = Temperature(25)
+print(t1.celsius)      # Line A
+
+t1.celsius = -300
+print(t1.celsius)      # Line B
+
+t1.celsius = 100
+print(t1.celsius)      # Line C
+#write the full Book class, with __init__ (taking title and author) and __str__ (returning "Harry Potter by J.K. Rowling" style output, using only self).
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def __str__(self):
+        return f"{self.title} by {self.author}"
+
+b1 = Book("Harry potter", "j.k. rowling")
+print(b1)
+
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def __str__(self):
+        return f"{self.title} by {self.author}"
+
+    def __repr__(self):
+        return f"Book('{self.title}', '{self.author}')"
+
+b1 = Book("Harry Potter", "J.K. Rowling")
+
+print(b1)              # Line A — uses __str__
+print([b1, b1])         # Line B — a LIST containing the object — uses __repr__ instead!
+
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+b1 = Book("Harry Potter", "J.K. Rowling")
+b2 = Book("Harry Potter", "J.K. Rowling")
+
+print(b1 == b2)
+
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def __eq__(self, other):
+        return self.title == other.title and self.author == other.author
+b1 = Book("Harry Potter", "J.K. Rowling")
+b2 = Book("Harry Potter", "J.K. Rowling")
+
+print(b1 == b2)   # now checks content instead of identity
+
+
+
+class Wallet:
+    def __init__(self, amount):
+        self.amount = amount
+
+    def __add__(self, other):
+        return self.amount + other.amount
+
+w1 = Wallet(100)
+w2 = Wallet(50)
+print(w1 + w2)
+
+#aggeration
+class Author:
+    def __init__(self, name):
+        self.name = name
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def display(self):
+        print(f"title: {self.title}, Author: {self.author.name}")
+
+a1 = Author("J.k. rowling")
+b1 = Book("Harry potter", a1)
+b1.display()
+#based on __call__ printing f"Hello, {self.name}!", and g1 = Greeter("Aliza") — what do you think g1() prints?
+class Greeter:
+    def __init__(self, name):
+        self.name = name
+    def __call__(self):
+        print(f"Hello, {self.name}!")
+        
+g1 = Greeter("Aliza")
+g1()  # This will print: Hello, Aliza!
+class Dog:
+    pass
+
+print(type(Dog))
+class MyMeta(type):
+    def __new__(cls, name, bases, dct):
+        print(f"Creating class: {name}")
+        return super().__new__(cls, name, bases, dct)
+
+class Dog(metaclass=MyMeta):
+    pass
+def remove_duplicates(numbers):
+    slow_pointer = 0
+    for fast_pointer in range(1, len(numbers)):
+        # your logic here: compare numbers[slow_pointer] and numbers[fast_pointer]
+        # if different: move slow_pointer forward, place the new value there
+        if numbers[slow_pointer] != numbers[fast_pointer]:
+            slow_pointer += 1
+            numbers[slow_pointer] = numbers[fast_pointer]
+    return numbers[:slow_pointer + 1]   # the unique portion of the list
+       
